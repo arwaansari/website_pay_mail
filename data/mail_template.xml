@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="mail_pay" model="mail.template">
+            <field name="name">Website Pay Mail</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <!--           <field name="auto_delete" eval="True"/>-->
+            <field name="email_from">{{user.email}}</field>
+            <field name="email_to">{{user.email}}</field>
+            <!--           <field name="report_template" ref="action_example_pdf"/>-->
+            <field name="subject">NEW ORDER</field>
+            <field name="body_html" type="html">
+                <br/>
+                <br/>
+                <p>New order has been placed</p>
+                <br/>
+                <span style="font-size:15px;font-weight:bold;">Customer :
+                    <t t-esc="customer"/>
+                </span>
+                <br/>
+                <span style="font-size:15px;font-weight:bold;">Sale Order No :
+                    <t t-esc="sale_order_no"/>
+                </span>
+                <br/>
+                <br/>
+                <table border="1px solid" align="centre" class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Delivered</th>
+                            <th>Invoiced</th>
+                            <th>Unit Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="order_line" t-as="line">
+                            <tr>
+                                <td>
+                                    <t t-esc="line.product_template_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.product_uom_qty"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.qty_delivered"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.qty_invoiced"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.price_unit"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.price_subtotal"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/>
+                <span style="font-size:15px;font-weight:bold;">Total Amount :
+                    <t t-esc="ctx.get('total_amount')"/>
+                </span><br/>
+                <center>
+                <a t-attf-href='/web#id={{id}}&amp;model=sale.order&amp;view_type=form'>View Sale Order</a>
+                </center>
+            </field>
+        </record>
+    </data>
+</odoo>
